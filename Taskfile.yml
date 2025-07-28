@@ -1,0 +1,39 @@
+# https://taskfile.dev
+
+version: "3"
+
+tasks:
+  test:
+    cmds:
+      - go test -count=1 -race -v
+
+  update/minimp3:
+    cmds:
+      - curl "https://raw.githubusercontent.com/lieff/minimp3/refs/heads/master/minimp3.h" -o minimp3.h
+      - curl "https://raw.githubusercontent.com/lieff/minimp3/refs/heads/master/minimp3_ex.h" -o minimp3_ex.h
+    sources:
+      - Taskfile.yml
+    generates:
+      - minimp3.h
+      - minimp3_ex.h
+
+  update/mp3:
+    cmds:
+      - curl "https://samples.ffmpeg.org/A-codecs/suite/MP3/piano.mp3" -o testdata/piano.mp3
+      - curl "https://samples.ffmpeg.org/A-codecs/suite/MP3/44khz128kbps.mp3" -o testdata/44khz128kbps.mp3
+    sources:
+      - Taskfile.yml
+    generates:
+      - testdata/piano.mp3
+      - testdata/44khz128kbps.mp3
+
+  update/wav:
+    deps: [update/mp3]
+    cmds:
+      - go test -count=1 -race -v -write-golden=true
+    sources:
+      - testdata/piano.mp3
+      - testdata/44khz128kbps.mp3
+    generates:
+      - testdata/piano.wav
+      - testdata/44khz128kbps.wav
