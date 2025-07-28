@@ -1,0 +1,12 @@
+# https://taskfile.dev
+
+version: "3"
+
+tasks:
+  run/mp3-to-wav:
+    cmds:
+      - "cat ../testdata/44khz128kbps.mp3 | go run ./mp3-to-wav | ffplay -autoexit -i pipe:"
+
+  run/play-mp3:
+    cmds:
+      - go run ./play-mp3
