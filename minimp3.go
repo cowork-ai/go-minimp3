@@ -15,6 +15,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	"log"
 	"unsafe"
 )
 
@@ -46,12 +47,12 @@ type Waveform struct {
 
 // NewReader returns a new [io.Reader] that streams the waveform's data
 // as signed 16-bit little-endian PCM.
-func (w *Waveform) NewReader() (io.Reader, error) {
+func (w *Waveform) NewReader() io.Reader {
 	var buf bytes.Buffer
 	if _, err := w.WriteTo(&buf); err != nil {
-		return nil, err
+		log.Panic(err)
 	}
-	return &buf, nil
+	return &buf
 }
 
 // WriteTo implements the [io.WriterTo] interface, writing the waveform's samples
