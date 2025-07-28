@@ -9,8 +9,8 @@ tasks:
 
   update/minimp3:
     cmds:
-      - curl "https://raw.githubusercontent.com/lieff/minimp3/refs/heads/master/minimp3.h" -o minimp3.h
-      - curl "https://raw.githubusercontent.com/lieff/minimp3/refs/heads/master/minimp3_ex.h" -o minimp3_ex.h
+      - curl -o minimp3.h https://raw.githubusercontent.com/lieff/minimp3/refs/heads/master/minimp3.h
+      - curl -o minimp3_ex.h https://raw.githubusercontent.com/lieff/minimp3/refs/heads/master/minimp3_ex.h
     sources:
       - Taskfile.yml
     generates:
@@ -19,15 +19,15 @@ tasks:
 
   update/mp3:
     cmds:
-      - curl "https://samples.ffmpeg.org/A-codecs/suite/MP3/piano.mp3" -o testdata/piano.mp3
-      - curl "https://samples.ffmpeg.org/A-codecs/suite/MP3/44khz128kbps.mp3" -o testdata/44khz128kbps.mp3
+      - curl -o testdata/piano.mp3 https://samples.ffmpeg.org/A-codecs/suite/MP3/piano.mp3
+      - curl -o testdata/44khz128kbps.mp3 https://samples.ffmpeg.org/A-codecs/suite/MP3/44khz128kbps.mp3
     sources:
       - Taskfile.yml
     generates:
       - testdata/piano.mp3
       - testdata/44khz128kbps.mp3
 
-  update/wav:
+  update/pcm:
     deps: [update/mp3]
     cmds:
       - go test -count=1 -race -v -write-golden=true
@@ -35,5 +35,10 @@ tasks:
       - testdata/piano.mp3
       - testdata/44khz128kbps.mp3
     generates:
-      - testdata/piano.wav
-      - testdata/44khz128kbps.wav
+      - testdata/piano_s16le_44.1khz_stereo.pcm
+      - testdata/44khz128kbps_s16le_44.1khz_stereo.pcm
+
+  play/pcm:
+    cmds:
+      - ffplay -autoexit -f s16le -ar 44.1k -ch_layout stereo testdata/piano_s16le_44.1khz_stereo.pcm
+      - ffplay -autoexit -f s16le -ar 44.1k -ch_layout stereo testdata/44khz128kbps_s16le_44.1khz_stereo.pcm

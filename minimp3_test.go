@@ -7,14 +7,11 @@ import (
 	"io"
 	"os"
 	"testing"
-
-	"github.com/go-audio/audio"
-	"github.com/go-audio/wav"
 )
 
 var writeGolden = flag.Bool("write-golden", false, "")
 
-func TestDecodeMP3(t *testing.T) {
+func TestDecode(t *testing.T) {
 	tests := []struct {
 		name string
 		in   string
@@ -23,12 +20,12 @@ func TestDecodeMP3(t *testing.T) {
 		{
 			"Piano",
 			"./testdata/piano.mp3",
-			"./testdata/piano.wav",
+			"./testdata/piano_s16le_44.1khz_stereo.pcm",
 		},
 		{
 			"44kHz128kbps",
 			"./testdata/44khz128kbps.mp3",
-			"./testdata/44khz128kps.wav",
+			"./testdata/44khz128kbps_s16le_44.1khz_stereo.pcm",
 		},
 	}
 	for _, tt := range tests {
@@ -37,37 +34,28 @@ func TestDecodeMP3(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			pcm, err := DecodeMP3(bs)
+			wav, err := Decode(bs)
 			if err != nil {
 				t.Fatal(err)
 			}
-			buf := newIntBuffer(pcm)
 			if *writeGolden {
 				f, err := os.Create(tt.out)
 				if err != nil {
 					t.Fatal(err)
 				}
-				encoder := wav.NewEncoder(f, buf.Format.SampleRate, buf.SourceBitDepth, buf.Format.NumChannels, 1)
-				if err := encoder.Write(buf); err != nil {
-					t.Fatal(err)
-				}
-				if err := encoder.Close(); err != nil {
+				if _, err := wav.WriteTo(f); err != nil {
 					t.Fatal(err)
 				}
 				if err := f.Close(); err != nil {
 					t.Fatal(err)
 				}
 			}
-			f, err := os.CreateTemp(t.TempDir(), "decode-mp3-*.wav")
+			f, err := os.CreateTemp(t.TempDir(), "decode_mp3_s16le_44.1khz_stereo_*.pcm")
 			if err != nil {
 				t.Fatal(err)
 			}
 			defer os.Remove(f.Name())
-			encoder := wav.NewEncoder(f, buf.Format.SampleRate, buf.SourceBitDepth, buf.Format.NumChannels, 1)
-			if err := encoder.Write(buf); err != nil {
-				t.Fatal(err)
-			}
-			if err := encoder.Close(); err != nil {
+			if _, err := wav.WriteTo(f); err != nil {
 				t.Fatal(err)
 			}
 			if err := f.Close(); err != nil {
@@ -77,21 +65,6 @@ func TestDecodeMP3(t *testing.T) {
 				t.Errorf("md5Sum=%v, want=%v", got, want)
 			}
 		})
-	}
-}
-
-func newIntBuffer(pcm *PCM) *audio.IntBuffer {
-	data := make([]int, len(pcm.Data))
-	for i, b := range pcm.Data {
-		data[i] = int(b)
-	}
-	return &audio.IntBuffer{
-		Format: &audio.Format{
-			NumChannels: pcm.NumChannels,
-			SampleRate:  pcm.SampleRate,
-		},
-		Data:           data,
-		SourceBitDepth: 16,
 	}
 }
 

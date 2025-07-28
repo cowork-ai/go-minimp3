@@ -11,23 +11,55 @@ package minimp3
 import "C"
 
 import (
+	"bytes"
+	"encoding/binary"
 	"fmt"
+	"io"
 	"unsafe"
 )
 
-type PCM struct {
-	NumChannels int
-	SampleRate  int
-	Data        []int16
-}
-
-func DecodeMP3(in []byte) (*PCM, error) {
+// Decode parses an MP3 byte slice and returns a [Waveform].
+func Decode(mp3Data []byte) (*Waveform, error) {
 	var info C.mp3dec_file_info_t
 	defer C.free(unsafe.Pointer(info.buffer))
-	if errCode := C.decode_mp3(&info, (*C.uint8_t)(&in[0]), C.size_t(len(in))); errCode != 0 {
+	if errCode := C.decode_mp3(&info, (*C.uint8_t)(&mp3Data[0]), C.size_t(len(mp3Data))); errCode != 0 {
 		return nil, fmt.Errorf("decode_mp3 failed. errCode: %d", errCode)
 	}
-	data := make([]int16, info.samples)
-	copy(data, unsafe.Slice((*int16)(info.buffer), info.samples))
-	return &PCM{int(info.channels), int(info.hz), data}, nil
+	samples := make([]int16, info.samples)
+	copy(samples, unsafe.Slice((*int16)(info.buffer), info.samples))
+	return &Waveform{
+		Channels:   int(info.channels),
+		SampleRate: int(info.hz),
+		Samples:    samples,
+	}, nil
+}
+
+// Waveform represents decoded PCM audio data. 🎶
+type Waveform struct {
+	// Channels is the number of audio channels (e.g., 1 for mono, 2 for stereo).
+	Channels int
+	// SampleRate is the number of samples per second (e.g., 44100 Hz).
+	SampleRate int
+	// Samples contains the interleaved audio data.
+	Samples []int16
+}
+
+// NewReader returns a new [io.Reader] that streams the waveform's data
+// as signed 16-bit little-endian PCM.
+func (w *Waveform) NewReader() (io.Reader, error) {
+	var buf bytes.Buffer
+	if _, err := w.WriteTo(&buf); err != nil {
+		return nil, err
+	}
+	return &buf, nil
+}
+
+// WriteTo implements the [io.WriterTo] interface, writing the waveform's samples
+// to a writer as signed 16-bit little-endian PCM data.
+func (w *Waveform) WriteTo(writer io.Writer) (int64, error) {
+	if err := binary.Write(writer, binary.LittleEndian, w.Samples); err != nil {
+		return 0, err
+	}
+	// Each int16 sample is 2 bytes.
+	return int64(len(w.Samples) * 2), nil
 }
