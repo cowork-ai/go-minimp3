@@ -3,7 +3,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/cowork-ai/go-minimp3.svg)](https://pkg.go.dev/github.com/cowork-ai/go-minimp3)
 
 [go-minimp3](https://github.com/cowork-ai/go-minimp3) is a Go binding for the [minimp3](https://github.com/lieff/minimp3) C library. The following is the minimp3
-description from its author, @lieff.
+description from its author, [@lieff](https://github.com/lieff).
 
 > Minimalistic, single-header library for decoding MP3. minimp3 is designed to be small, fast (with SSE and NEON support), and accurate (ISO conformant).
 
