@@ -2,7 +2,7 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/cowork-ai/go-minimp3.svg)](https://pkg.go.dev/github.com/cowork-ai/go-minimp3)
 
-go-minimp3 is a Go binding for the [minimp3](https://github.com/lieff/minimp3) C library. The following is the minimp3
+[go-minimp3](https://github.com/cowork-ai/go-minimp3) is a Go binding for the [minimp3](https://github.com/lieff/minimp3) C library. The following is the minimp3
 description from its author, @lieff.
 
 > Minimalistic, single-header library for decoding MP3. minimp3 is designed to be small, fast (with SSE and NEON support), and accurate (ISO conformant).
@@ -51,7 +51,7 @@ Many useful commands are in two `Taskfile.yml` files: [Taskfile.yml](https://git
 
 ## Dockerfile
 
-Check out the Dockerfile for an example of using `golang:1.24` and `gcr.io/distroless/base-debian12` to run `go-minimp3` with Cgo enabled.
+Check out the [Dockerfile](https://github.com/cowork-ai/go-minimp3/blob/main/Dockerfile) for an example of using `golang:1.24` and `gcr.io/distroless/base-debian12` to run `go-minimp3` with Cgo enabled.
 
 ```bash
 docker build -t cowork-ai/go-minimp3 .
