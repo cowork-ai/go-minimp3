@@ -32,8 +32,8 @@ func run() error {
 	}
 	defer os.Remove(tmp.Name())
 	defer tmp.Close()
-	// wav.NewEncoder requires io.WriterSeeker but os.Stdout is not one even though it pretends like one.
-	// so write to a temporary file first.
+	// The wav.NewEncoder requires an io.WriteSeeker. Since os.Stdout is not always seekable
+	// (e.g., when it's a pipe), we write to a temporary file first and then copy it to standard output.
 	encoder := wav.NewEncoder(tmp, buf.Format.SampleRate, buf.SourceBitDepth, buf.Format.NumChannels, 1)
 	if err := encoder.Write(buf); err != nil {
 		return err

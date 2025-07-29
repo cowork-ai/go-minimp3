@@ -43,8 +43,8 @@ Check out [examples/mp3-to-wav](https://github.com/cowork-ai/go-minimp3/blob/mai
 
 ### How to play an MP3 file using Oto
 
-Check out [examples/play-mp3](https://github.com/cowork-ai/go-minimp3/tree/main/examples/play-mp3)
+Check out [examples/play-mp3](https://github.com/cowork-ai/go-minimp3/tree/main/examples/play-mp3/main.go)
 
 ## Taskfile.yml
 
-Many useful commands are in two `Taskfile.yml` files: [Taskfile.yml](https://github.com/cowork-ai/go-minimp3/blob/main/Taskfile.yml) and [examples/Taskfile.yml](https://github.com/cowork-ai/go-minimp3/blob/main/examples/Taskfile.yml). The format is from [go-task/task](https://github.com/go-task/task), which is similar to [GNU Make](https://www.gnu.org/software/make/).
+Many useful commands are in two `Taskfile.yml` files: [Taskfile.yml](https://github.com/cowork-ai/go-minimp3/blob/main/Taskfile.yml) and [examples/Taskfile.yml](https://github.com/cowork-ai/go-minimp3/blob/main/examples/Taskfile.yml). To run the tasks, you need to install [go-task/task](https://github.com/go-task/task), which works similarly to [GNU Make](https://www.gnu.org/software/make/).
