@@ -42,3 +42,10 @@ tasks:
     cmds:
       - ffplay -autoexit -f s16le -ar 44.1k -ch_layout stereo testdata/piano_s16le_44.1khz_stereo.pcm
       - ffplay -autoexit -f s16le -ar 44.1k -ch_layout stereo testdata/44khz128kbps_s16le_44.1khz_stereo.pcm
+
+  run/docker:
+    cmds:
+      - docker build -t {{.DOCKER_IMAGE}} .
+      - "cat ./testdata/44khz128kbps.mp3 | docker run --rm -i {{.DOCKER_IMAGE}} | ffplay -autoexit -i pipe:"
+    vars:
+      DOCKER_IMAGE: cowork-ai/go-minimp3

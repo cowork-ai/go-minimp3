@@ -48,3 +48,12 @@ Check out [examples/play-mp3](https://github.com/cowork-ai/go-minimp3/tree/main/
 ## Taskfile.yml
 
 Many useful commands are in two `Taskfile.yml` files: [Taskfile.yml](https://github.com/cowork-ai/go-minimp3/blob/main/Taskfile.yml) and [examples/Taskfile.yml](https://github.com/cowork-ai/go-minimp3/blob/main/examples/Taskfile.yml). To run the tasks, you need to install [go-task/task](https://github.com/go-task/task), which works similarly to [GNU Make](https://www.gnu.org/software/make/).
+
+## Dockerfile
+
+Check out the Dockerfile for an example of using `golang:1.24` and `gcr.io/distroless/base-debian12` to run `go-minimp3` with Cgo enabled. The `gcr.io/distroless/static-debian12` image does not work because it lacks `glibc`.
+
+```bash
+docker build -t cowork-ai/go-minimp3 .
+cat ./testdata/44khz128kbps.mp3 | docker run --rm -i cowork-ai/go-minimp3 | ffplay -autoexit -i pipe:
+```
