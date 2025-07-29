@@ -37,11 +37,11 @@ func (w *Waveform) WriteTo(writer io.Writer) (int64, error)
 
 ## Examples
 
-### How to convert an MP3 file to a WAV file using go-audio/wav
+### How to convert an MP3 file to a WAV file using [go-audio/wav](https://github.com/go-audio/wav)
 
 Check out [examples/mp3-to-wav](https://github.com/cowork-ai/go-minimp3/blob/main/examples/mp3-to-wav/main.go)
 
-### How to play an MP3 file using Oto
+### How to play an MP3 file using [ebitengine/oto](https://github.com/ebitengine/oto)
 
 Check out [examples/play-mp3](https://github.com/cowork-ai/go-minimp3/tree/main/examples/play-mp3/main.go)
 
@@ -51,9 +51,11 @@ Many useful commands are in two `Taskfile.yml` files: [Taskfile.yml](https://git
 
 ## Dockerfile
 
-Check out the Dockerfile for an example of using `golang:1.24` and `gcr.io/distroless/base-debian12` to run `go-minimp3` with Cgo enabled. The `gcr.io/distroless/static-debian12` image does not work because it lacks `glibc`.
+Check out the Dockerfile for an example of using `golang:1.24` and `gcr.io/distroless/base-debian12` to run `go-minimp3` with Cgo enabled.
 
 ```bash
 docker build -t cowork-ai/go-minimp3 .
 cat ./testdata/44khz128kbps.mp3 | docker run --rm -i cowork-ai/go-minimp3 | ffplay -autoexit -i pipe:
 ```
+
+Note that the `gcr.io/distroless/static-debian12` image does not work because it lacks `glibc`.
