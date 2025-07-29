@@ -4,7 +4,7 @@ package minimp3
 // #include "minimp3.h"
 // #include "minimp3_ex.h"
 //
-// int decode_mp3(mp3dec_file_info_t* out, const uint8_t* data, size_t data_size) {
+// int decode(mp3dec_file_info_t* out, const uint8_t* data, size_t data_size) {
 //   mp3dec_t mp3d;
 //   return mp3dec_load_buf(&mp3d, data, data_size, out, 0, 0);
 // }
@@ -23,8 +23,8 @@ import (
 func Decode(mp3Data []byte) (*Waveform, error) {
 	var info C.mp3dec_file_info_t
 	defer C.free(unsafe.Pointer(info.buffer))
-	if errCode := C.decode_mp3(&info, (*C.uint8_t)(&mp3Data[0]), C.size_t(len(mp3Data))); errCode != 0 {
-		return nil, fmt.Errorf("decode_mp3 failed. errCode: %d", errCode)
+	if errCode := C.decode(&info, (*C.uint8_t)(&mp3Data[0]), C.size_t(len(mp3Data))); errCode != 0 {
+		return nil, fmt.Errorf("decode failed. errCode: %d", errCode)
 	}
 	samples := make([]int16, info.samples)
 	copy(samples, unsafe.Slice((*int16)(info.buffer), info.samples))
