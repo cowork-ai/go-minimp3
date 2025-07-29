@@ -7,7 +7,7 @@ description from its author, @lieff.
 
 > Minimalistic, single-header library for decoding MP3. minimp3 is designed to be small, fast (with SSE and NEON support), and accurate (ISO conformant).
 
-go-minimp3 has a very simple interface, one function and one struct, and has zero external dependencies. However, CGo
+go-minimp3 has a very simple interface, one function and one struct, and has zero external dependencies. However, Cgo
 must be enabled to compile this package.
 
 ## Interface

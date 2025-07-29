@@ -3,6 +3,7 @@ package minimp3
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"errors"
 	"flag"
 	"io"
 	"os"
@@ -10,6 +11,17 @@ import (
 )
 
 var writeGolden = flag.Bool("write-golden", false, "")
+
+func TestDecodeNoData(t *testing.T) {
+	_, err := Decode(nil)
+	if got, want := err, ErrNoData; !errors.Is(got, want) {
+		t.Errorf("Decode=%v, want=%v", got, want)
+	}
+	_, err = Decode([]byte{})
+	if got, want := err, ErrNoData; !errors.Is(got, want) {
+		t.Errorf("Decode=%v, want=%v", got, want)
+	}
+}
 
 func TestDecode(t *testing.T) {
 	tests := []struct {
