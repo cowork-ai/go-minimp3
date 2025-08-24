@@ -4,6 +4,7 @@ version: "3"
 
 tasks:
   test:
+    deps: [update/testdata]
     cmds:
       - go test -count=1 -race -v
 
@@ -11,24 +12,20 @@ tasks:
     cmds:
       - curl -o minimp3.h https://raw.githubusercontent.com/lieff/minimp3/refs/heads/master/minimp3.h
       - curl -o minimp3_ex.h https://raw.githubusercontent.com/lieff/minimp3/refs/heads/master/minimp3_ex.h
-    sources:
-      - Taskfile.yml
-    generates:
-      - minimp3.h
-      - minimp3_ex.h
 
-  update/mp3:
+  update/testdata:
+    deps: [update/testdata/pcm]
+
+  update/testdata/mp3:
     cmds:
       - curl -o testdata/piano.mp3 https://samples.ffmpeg.org/A-codecs/suite/MP3/piano.mp3
       - curl -o testdata/44khz128kbps.mp3 https://samples.ffmpeg.org/A-codecs/suite/MP3/44khz128kbps.mp3
-    sources:
-      - Taskfile.yml
-    generates:
-      - testdata/piano.mp3
-      - testdata/44khz128kbps.mp3
+    status:
+      - test -f testdata/piano.mp3
+      - test -f testdata/44khz128kbps.mp3
 
-  update/pcm:
-    deps: [update/mp3]
+  update/testdata/pcm:
+    deps: [update/testdata/mp3]
     cmds:
       - go test -count=1 -race -v -write-golden=true
     sources:
@@ -38,7 +35,7 @@ tasks:
       - testdata/piano_s16le_44.1khz_stereo.pcm
       - testdata/44khz128kbps_s16le_44.1khz_stereo.pcm
 
-  play/pcm:
+  play/testdata/pcm:
     cmds:
       - ffplay -autoexit -f s16le -ar 44.1k -ch_layout stereo testdata/piano_s16le_44.1khz_stereo.pcm
       - ffplay -autoexit -f s16le -ar 44.1k -ch_layout stereo testdata/44khz128kbps_s16le_44.1khz_stereo.pcm

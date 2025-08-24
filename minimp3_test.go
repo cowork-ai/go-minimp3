@@ -59,7 +59,7 @@ func TestDecode(t *testing.T) {
 					t.Fatal(err)
 				}
 			}
-			f, err := os.CreateTemp(t.TempDir(), "decode_mp3_s16le_44.1khz_stereo_*.pcm")
+			f, err := os.CreateTemp(t.TempDir(), "test_decode_*.pcm")
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -70,6 +70,8 @@ func TestDecode(t *testing.T) {
 			if err := f.Close(); err != nil {
 				t.Fatal(err)
 			}
+			// NOTE: We check the decoded MP3 file sizes, not their hashes, because MP3 decoding can yield different byte
+			// outputs across various CPU architectures and operating systems.
 			if got, want := fileSize(t, f.Name()), fileSize(t, tt.out); got != want {
 				t.Errorf("fileSize=%v, want=%v", got, want)
 			}
