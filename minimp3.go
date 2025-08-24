@@ -24,21 +24,18 @@ var ErrNoData = errors.New("minimp3: no data provided")
 
 // Decode parses an MP3 byte slice and returns a [Waveform].
 func Decode(mp3Data []byte) (*Waveform, error) {
+	// NOTE: unsafe.SliceData returns an invalid pointer if a slice is non-nil but cap() is zero, e.g., []byte{}.
 	if len(mp3Data) == 0 {
 		return nil, ErrNoData
 	}
 	var info C.mp3dec_file_info_t
 	defer C.free(unsafe.Pointer(info.buffer))
-	if errCode := C.decode(&info, (*C.uint8_t)(&mp3Data[0]), C.size_t(len(mp3Data))); errCode != 0 {
+	if errCode := C.decode(&info, (*C.uint8_t)(unsafe.SliceData(mp3Data)), C.size_t(len(mp3Data))); errCode != 0 {
 		return nil, fmt.Errorf("minimp3: decode failed. errCode: %d", errCode)
 	}
 	samples := make([]int16, info.samples)
 	copy(samples, unsafe.Slice((*int16)(info.buffer), info.samples))
-	return &Waveform{
-		Channels:   int(info.channels),
-		SampleRate: int(info.hz),
-		Samples:    samples,
-	}, nil
+	return &Waveform{Channels: int(info.channels), SampleRate: int(info.hz), Samples: samples}, nil
 }
 
 // Waveform represents decoded PCM audio data. 🎶
