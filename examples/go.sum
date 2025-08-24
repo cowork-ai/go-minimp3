@@ -1,5 +1,7 @@
 github.com/cowork-ai/go-minimp3 v1.0.0 h1:5uaZRsn0bHVjts0RyUrrIADmc4gq0MuAqESlp+jaVjw=
 github.com/cowork-ai/go-minimp3 v1.0.0/go.mod h1:AKFOhmlspn7agvRNfXsPKqk7skpS5Zy977B8Jcaig0s=
+github.com/cowork-ai/go-minimp3 v1.0.1 h1:C10cQHcckq+UuZTX3SUGN5r0GI2OLL7pvlTjai7iKUo=
+github.com/cowork-ai/go-minimp3 v1.0.1/go.mod h1:AKFOhmlspn7agvRNfXsPKqk7skpS5Zy977B8Jcaig0s=
 github.com/ebitengine/oto/v3 v3.3.3 h1:m6RV69OqoXYSWCDsHXN9rc07aDuDstGHtait7HXSM7g=
 github.com/ebitengine/oto/v3 v3.3.3/go.mod h1:MZeb/lwoC4DCOdiTIxYezrURTw7EvK/yF863+tmBI+U=
 github.com/ebitengine/purego v0.8.4 h1:CF7LEKg5FFOsASUj0+QwaXf8Ht6TlFxg09+S9wz0omw=
@@ -12,3 +14,5 @@ github.com/go-audio/wav v1.1.0 h1:jQgLtbqBzY7G+BM8fXF7AHUk1uHUviWS4X39d5rsL2g=
 github.com/go-audio/wav v1.1.0/go.mod h1:mpe9qfwbScEbkd8uybLuIpTgHyrISw/OTuvjUW2iGtE=
 golang.org/x/sys v0.34.0 h1:H5Y5sJ2L2JRdyv7ROF1he/lPdvFsd0mJHFw2ThKHxLA=
 golang.org/x/sys v0.34.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=
+golang.org/x/sys v0.35.0 h1:vz1N37gP5bs89s7He8XuIYXpyY0+QlsKmzipCbUtyxI=
+golang.org/x/sys v0.35.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=
